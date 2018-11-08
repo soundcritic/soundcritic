@@ -18,13 +18,11 @@ import PropTypes from 'prop-types'
 
 const styles = theme => ({
     container: {
-        //backgroundColor: '#4a4a48',
         height: '100vh !important',
         display: 'flex',
         alignItems: 'center'
     },
     card: {
-        //display: 'flex',
         width: '50%',
         backgroundColor: 'orange',
         margin: '0 auto'
@@ -48,7 +46,6 @@ const styles = theme => ({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         paddingLeft: theme.spacing.unit,
-        //paddingBottom: theme.spacing.unit,
     },
     playIcon: {
         height: 38,
@@ -58,8 +55,7 @@ const styles = theme => ({
         display: 'flex', 
         justifyContent: 'space-evenly',
     }
-});
-
+})
 
 class Player extends Component {
     constructor(props) {
@@ -70,7 +66,8 @@ class Player extends Component {
     }
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme } = this.props
+        
         return (
             <div className={classes.container}>
 
@@ -78,12 +75,12 @@ class Player extends Component {
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
                         <Typography component="h5" variant="h5">
-                                    90%
-                                </Typography>
+                            90%
+                        </Typography>
                         <CardMedia
                             className={classes.cover}
                             image="https://bit.ly/2PmhsBh"
-                            title="Live from space album cover"
+                            //title="Live from space album cover"
                         />
                        
                                 <Typography component="h5" variant="h5">
@@ -96,7 +93,7 @@ class Player extends Component {
                         </div>
 
                     <div className={classes.controls}>
-                        <IconButton aria-label="Previous">
+                        <IconButton aria-label="Previous" > 
                             {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
                         </IconButton>
                         <IconButton aria-label="Play/pause">
@@ -127,4 +124,4 @@ Player.propTypes = {
 };
 
 
-export default withStyles(styles, { withTheme: true })(Player);
+export default withStyles(styles, { withTheme: true })(Player)
