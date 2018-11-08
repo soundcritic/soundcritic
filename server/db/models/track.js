@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const db = require('./db')
+const db = require('../db')
 
 const Track = db.define('track', {
   title: Sequelize.STRING,
@@ -8,8 +8,8 @@ const Track = db.define('track', {
   genre: Sequelize.STRING,
   rating: Sequelize.INTEGER,
   sliderRating: Sequelize.ARRAY(Sequelize.JSONB), //if we use JSONB we can store an object with the slider name and rating like this {name: 'guitar', 87}, but this can be restructured
-  likes: Sequelize.INTEGER,
-  dislikes: Sequelize.INTEGER
+  numlikes: Sequelize.INTEGER,
+  numdislikes: Sequelize.INTEGER
 })
 
 module.exports = Track
