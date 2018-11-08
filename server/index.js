@@ -51,20 +51,22 @@ const createApp = () => {
   // compression middleware
   app.use(compression())
 
+  ///I commented out below cuz we arent using it right now-------------
+  //------------------------------------------------------------------
   // session middleware with passport
-  app.use(
-    session({
-      secret: process.env.SESSION_SECRET || 'my best friend is Cody',
-      store: sessionStore,
-      resave: false,
-      saveUninitialized: false
-    })
-  )
-  app.use(passport.initialize())
-  app.use(passport.session())
-
+  // app.use(
+  //   session({
+  //     secret: process.env.SESSION_SECRET || 'my best friend is Cody',
+  //     store: sessionStore,
+  //     resave: false,
+  //     saveUninitialized: false
+  //   })
+  // )
+  // app.use(passport.initialize())
+  // app.use(passport.session())
+//------------------------------------------------------------------
   // auth and api routes
-  app.use('/auth', require('./auth'))
+  //app.use('/auth', require('./auth'))
   app.use('/api', require('./api'))
 
   // static file-serving middleware
@@ -99,6 +101,8 @@ const startListening = () => {
   const server = app.listen(PORT, () =>
     console.log(`Mixing it up on port ${PORT}`)
   )
+
+
 
   // set up our socket control center
   const io = socketio(server)
