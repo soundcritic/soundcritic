@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'test') {
 //the juke db.js file looks like below-----------------------
 
 // const Sequelize = require('sequelize')
-// const db = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost:5432/juke', {
+// const db = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost:5432/soundcritic', {
 //   logging: false
 // })
 

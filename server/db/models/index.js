@@ -29,5 +29,5 @@ module.exports = {
   Track,
   Like,
   Dislike,
-  slider
+  Slider
 }
