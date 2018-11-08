@@ -1,13 +1,22 @@
 import React from 'react'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
-  <div>
-    <h1>BOILERMAKER</h1>
-    <nav>
+    <div>
+    <AppBar position='static'>
+    <Toolbar>
+    <Typography variant="title" color="inherit">
+    <h1>Sound Critic</h1>
+    </Typography>
+    </Toolbar>
+    <div>
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
@@ -23,7 +32,8 @@ const Navbar = ({handleClick, isLoggedIn}) => (
           <Link to="/signup">Sign Up</Link>
         </div>
       )}
-    </nav>
+      </div>
+    </AppBar>
     <hr />
   </div>
 )
