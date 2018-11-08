@@ -1,66 +1,47 @@
 import React from 'react'
+
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
-import {logout} from '../store'
+import { Link } from 'react-router-dom'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
-    <div>
-    <AppBar position='static'>
-    <Toolbar>
-    <Typography variant="title" color="inherit">
-    <h1>Sound Critic</h1>
-    </Typography>
-    </Toolbar>
-    <div>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      )}
-      </div>
-    </AppBar>
-    <hr />
-  </div>
-)
-
-/**
- * CONTAINER
- */
-const mapState = state => {
-  return {
-    isLoggedIn: !!state.user.id
-  }
+const styles = {
+  root: {
+    flexGrow: 1,
+  },
+  bg: {
+    backgroundColor: '#4A4A48',
+  },
+  grow: {
+    flexGrow: 1,
+  },
 }
 
-const mapDispatch = dispatch => {
-  return {
-    handleClick() {
-      dispatch(logout())
-    }
-  }
+const Navbar = (props) => {
+  const { classes } = props
+  
+  return (
+    <div className={classes.root}>
+      <AppBar position="static" className={classes.bg}>
+        <Toolbar>
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            Navbar
+          </Typography>
+          <Link to='/login'>
+            <Button color="inherit">Login</Button>
+          </Link>
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
 }
 
-export default connect(mapState, mapDispatch)(Navbar)
-
-/**
- * PROP TYPES
- */
 Navbar.propTypes = {
-  handleClick: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired
-}
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Navbar);
