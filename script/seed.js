@@ -1,11 +1,25 @@
 'use strict'
 const fs = require('fs')
 const db = require('../server/db/')
-const {Album, Artist, Track, Like, Dislike, Slider} = require('../server/db/models')
+const {
+  Album,
+  Artist,
+  Track,
+  Like,
+  Dislike,
+  Slider
+} = require('../server/db/models')
+const {lat, long} = require('../seedData/latlong')
+const likes = require('../seedData/likes')
 const tracks = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
-// const albums = JSON.parse(fs.readFileSync('./script/tracks.json', 'utf8'))
-// const artists = JSON.parse(fs.readFileSync('./script/tracks.json', 'utf8'))
+//const albums = JSON.parse(fs.readFileSync('./seedData/albums.json', 'utf8'))
+// const artists = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
 
+//const albums = require('./albums')
+
+// albums.forEach(album => {
+//   console.log('album:', album)
+// })
 
 async function seed() {
   await db.sync({force: true})
@@ -16,35 +30,35 @@ async function seed() {
   const nin = await Artist.create({name: 'Nine Inch Nails'})
 
   const ccv2 = await Album.create({
-    name: 'Creative Commons Volume 2',
+    title: 'Creative Commons Volume 2',
     artistId: dexter.id,
-    artworkUrl: 'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/creative_commons_vol_2.jpeg'
+    artworkPath:
+      'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/creative_commons_vol_2.jpeg'
   })
   const zenith = await Album.create({
-    name: 'Zenith',
+    title: 'Zenith',
     artistId: dexter.id,
-    artworkUrl: 'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/zenith.jpeg'
+    artworkPath:
+      'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/zenith.jpeg'
   })
   const noNations = await Album.create({
-    name: 'No Nations (Instrumentals)',
+    title: 'No Nations (Instrumentals)',
     artistId: jets.id,
-    artworkUrl: 'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/no_nations.jpeg'
+    artworkPath:
+      'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/no_nations.jpeg'
   })
   const ghosts = await Album.create({
-    name: 'Ghosts I-IV',
+    title: 'Ghosts I-IV',
     artistId: nin.id,
-    artworkUrl: 'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/ghosts_i-iv.jpeg'
+    artworkPath:
+      'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/ghosts_i-iv.jpeg'
   })
   const theSlip = await Album.create({
-    name: 'The Slip',
+    title: 'The Slip',
     artistId: nin.id,
-    artworkUrl: 'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/the_slip.jpeg'
+    artworkPath:
+      'https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/the_slip.jpeg'
   })
-
-  // await Promise.all(albums.map(album => Album.create({
-  //   title: album.title,
-  //   artistId: artist.id
-  // })))
 
   const artists = {
     'Dexter Britain': dexter,
@@ -54,20 +68,101 @@ async function seed() {
 
   const albums = {
     'Creative Commons Volume 2': ccv2,
-    'Zenith': zenith,
+    Zenith: zenith,
     'No Nations (Instrumentals)': noNations,
     'Ghosts I-IV': ghosts,
     'The Slip': theSlip
   }
 
+  //let createdAlbums = {}
 
-  await Promise.all(tracks.map(track => Track.create({
-    title: track.title,
-    audioUrl: track.audioUrl,
-    albumId: albums[track.album].id,
-    artistId: artists[track.artist].id,
-    genre: track.genre
-  })))
+  // await Promise.all(
+  //   albums.map(album => {
+  //     const createdAlbum = Album.create({
+  //       title: album.title,
+  //       artistId: album.artistid,
+  //       artworkPath: album.artworkPath
+  //     })
+  //     console.log('createdAlbum:', createdAlbum.id)
+  //     createdAlbums.push(createdAlbum)
+  //   })
+  // )
+
+  // for (let i = 0; i < albums.length; i++) {
+  //   const album = albums[i]
+  //   const createdAlbum = await Album.create({
+  //     title: album.title,
+  //     artistId: album.artistId,
+  //     artworkPath: album.artworkPath
+  //   })
+  //   console.log('createdAlbum:', createdAlbum)//createdAlbum.id, createdAlbum.title)
+  //   createdAlbums[createdAlbum.title] = createdAlbum
+  // }
+  // await Promise.all(
+  //   albums.map(album => {
+  //     const createdAlbum = Album.create({
+  //       title: album.title,
+  //       artistId: album.artistid,
+  //       artworkPath: album.artworkPath
+  //     })
+  //     console.log('createdAlbum:', createdAlbum.id)
+  //     createdAlbums.push(createdAlbum)
+  //   })
+  // )
+let createdTracks = []
+
+  await Promise.all(
+    tracks.map(track => {
+      //console.log('track.album', track.album, 'createdAlbums[track.album]', createdAlbums[track.album])
+      const createdTrack = Track.create({
+        title: track.title,
+        audioPath: track.audioPath,
+        albumId: albums[track.album].id,
+        artistId: artists[track.artist].id,
+        genre: track.genre,
+        // numlikes: 1,
+        // numdislikes: 1,
+        rating: 0
+      })
+      createdTracks.push(createdTrack)
+      return createdTrack
+    })
+  )
+let createdLikes = []
+  for (let i = 0; i < lat.length; i++) {
+    let newLike = await Like.create({
+      lat: lat[i],
+      long: long[i]
+    })
+    createdLikes.push(newLike)
+  }
+
+  // let createdDislikes = []
+  // for (let i = 0; i < lat.length; i++) {
+  //   let newDislike = await Dislike.create({
+  //     lat: lat[i],
+  //     long: long[i]
+  //   })
+  //   createdLikes.push(newDislike)
+  // }
+
+  for (let i = 0; i < lat.length; i++) {
+    const track = await Track.findById(Math.ceil(Math.random() * Math.floor(44)))
+
+    await track.addLike(createdLikes[i])
+
+
+  }
+
+  // for (let i = 0; i < lat.length; i++) {
+  //   const track = await Track.findById(Math.ceil(Math.random() * Math.floor(44)))
+
+  //   await track.addDislike(createdDislikes[i])
+
+
+  // }
+
+
   console.log(`seeded successfully`)
 }
 
