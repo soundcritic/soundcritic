@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Creative Commons Volume 2",
+    "artistId": "dexter.id",
+    "artworkUrl": "https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/creative_commons_vol_2.jpeg"
+  },
+  {
+    "name": "Zenith",
+    "artistId": "dexter.id",
+    "artworkUrl": "https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/zenith.jpeg"
+  },
+  {
+    "name": "No Nations (Instrumentals)",
+    "artistId": "jets.id",
+    "artworkUrl": "hhttps://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/no_nations.jpeg"
+  },
+  {
+    "name": "Ghosts I-IV",
+    "artistId": "nin.id",
+    "artworkUrl": "https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/ghosts_i-iv.jpeg"
+  },
+  {
+    "name": "The Slip",
+    "artistId": "nin.id",
+    "artworkUrl": "https://learndotresources.s3.amazonaws.com/workshop/58cff0e769468300041ef9fd/the_slip.jpeg"
+  }
+]
