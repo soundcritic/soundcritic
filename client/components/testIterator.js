@@ -1,7 +1,12 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchOneTrackSelector, fetchAllTracks, postLike} from '../store'
-
+import {
+  fetchOneTrackSelector,
+  fetchAllTracks,
+  postLike,
+  postDislike
+} from '../store'
+import axios from 'axios'
 
 function genLatLong() {
   const top = 49.3457868 //# north lat
@@ -10,10 +15,11 @@ function genLatLong() {
   const left = -124.7844079 //# west long
   const right = -66.9513812 //# east long
 
-
-
+  let lat = Math.random() * (top - bottom) + bottom
+  let long = Math.random() * (right - left) + left
+  let arr = [lat, long]
+  return arr
 }
-
 
 class testIterator extends Component {
   constructor(props) {
@@ -26,23 +32,32 @@ class testIterator extends Component {
     } catch (err) {
       console.log(err)
     }
-  }
-  dayIterator = () => {
+  }//
+  dayIterator = async () => {
     //select a track with selector thunk
     let numOfTracks = this.props.allTracks.length
     this.props.fetchOneTrackSelector(numOfTracks)
 
+
     //choose to like or dislike
     const randomNumber = Math.ceil(Math.random() * Math.floor(100))
-    const latLong = genLatLong()
-    if (randomNumber > 40) {
-      console.log('like')
-
-    } else {
-      console.log('dislike')
+    const latlong = genLatLong()
+    let data = {
+      latlong: latlong,
+      track: this.props.oneTrack
     }
 
+    if (randomNumber > 40) {
 
+      //POST like
+      //this.props.postLike(data)
+      await axios.post('/api/likes', data)
+    } else {
+      //POST dislike
+       await axios.post('/api/dislikes', data)
+      //this.props.postDislike(data)
+
+    }
   }
 
   render() {
@@ -64,6 +79,9 @@ const mapState = state => {
   }
 }
 
-export default connect(mapState, {fetchOneTrackSelector, fetchAllTracks})(
-  testIterator
-)
+export default connect(mapState, {
+  fetchOneTrackSelector,
+  fetchAllTracks,
+  postLike,
+  postDislike
+})(testIterator)

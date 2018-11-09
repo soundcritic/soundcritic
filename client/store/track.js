@@ -33,8 +33,9 @@ export const fetchOneTrackSelector = (numOfTracks) => async dispatch => {
 
   const response = await axios.get(`/api/tracks/${randomNumber}`)
   const track = response.data
-  console.log(track);
+
   if (track.rating >= testNumber) {
+    //console.log('thunk', track);
     dispatch(setOneTrack(track))
   } else {
     fetchOneTrackSelector(numOfTracks)

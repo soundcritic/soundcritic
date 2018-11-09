@@ -20,11 +20,11 @@ export const fetchAllDislikes = () => async dispatch => {
   const dislikes = response.data
   dispatch(setAllDislikes(dislikes))
 }
-export const postDislike = dislike => {
+export const postDislike = data => {
   return async dispatch => {
-    const response = await axios.post('/api/dislikes', dislike)
+    const response = await axios.post('/api/dislikes', data)
     const newDislike = response.data
-    dispatch(addDislike(newDislike))
+    //dispatch(addDislike(newDislike))
   }
 }
 

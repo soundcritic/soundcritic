@@ -21,11 +21,11 @@ export const fetchAllLikes = () => async dispatch => {
   const likes = response.data
   dispatch(setAllLikes(likes))
 }
-export const postLike = like => {
+export const postLike = data => {
   return async dispatch => {
-    const response = await axios.post('/api/likes', like)
+    const response = await axios.post('/api/likes', data)
     const newLike = response.data
-    dispatch(addLike(newLike))
+    //dispatch(addLike(newLike))
   }
 }
 
