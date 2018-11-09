@@ -181,8 +181,8 @@ async function seed() {
         albumId: albums[track.album].id,
         artistId: artists[track.artist].id,
         genre: track.genre,
-        numLikes: 0,
-        numDislikes: 0,
+        numLikes: 1,
+        numDislikes: 1,
         rating: 0
       })
       createdTracks.push(createdTrack)
