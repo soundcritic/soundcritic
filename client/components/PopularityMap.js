@@ -19,8 +19,8 @@ const styles = (theme) => ({
     input: {
         display: 'none',
     },
-    mapConfig: {
-
+    map: {
+        width: '50%',
     }
 })
 
@@ -29,10 +29,12 @@ class PopularityMap extends PureComponent {
         super()
         this.state = {
             likes: [],
-            dislikes: []
+            dislikes: [],
+            likesClicked: false,
+            disLikesClicked: false
         }
     }
-    async UNSAFE_componentWillMount() {
+    async componentDidMount() {
         const { data } = await axios.get(`/api/likes/${3}`)
         this.setState({
             likes: data
@@ -48,19 +50,27 @@ class PopularityMap extends PureComponent {
         console.log(evt.payload);
     }
 
+    handleLikesClicked = () => {
+        this.setState({likesClicked: true, disLikesClicked: false})
+    }
+
+    handleDislikesClicked = () => {
+        this.setState({likesClicked: false, disLikesClicked: true})
+    }
+
     render() {
         const getProvider = (x, y, z) => `https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/${z}/${x}/${y}.png`;
         const { classes } = this.props
-        const { likes } = this.state
+        const { likes, dislikes, likesClicked } = this.state
         const mapConfig = {
             center: [41.850033, -87.6500523],
             zoom: 4
         }
 
-
-
-        // create an array with marker components
-        const PigeonMarkers = likes.map(marker => (
+        const PigeonMarkersLikes = likes.map(marker => (
+            <Marker key={marker.id} anchor={marker.latlong} payload={1} onClick={this.onMarkerClick} />
+        ))
+        const PigeonMarkersDislikes = dislikes.map(marker => (
             <Marker key={marker.id} anchor={marker.latlong} payload={1} onClick={this.onMarkerClick} />
         ))
 
@@ -71,15 +81,15 @@ class PopularityMap extends PureComponent {
                         Popularity By Region
                     </Typography>
                     <div style={{display: 'flex', justifyContent: 'center'}}>
-                        <Button variant="outlined" className={classes.button}>
+                        <Button variant="outlined" className={classes.button} onClick={this.handleLikesClicked}>
                             Likes
                         </Button>
-                        <Button variant="outlined" className={classes.button}>
+                        <Button variant="outlined" className={classes.button} onClick={this.handleDislikesClicked}>
                             Dislikes
                         </Button>
                     </div>
                 </div>
-                <div className="map">
+                <div className={classes.map}>
                     <Map
                         width={window.innerWidth}
                         height={600}
@@ -87,7 +97,8 @@ class PopularityMap extends PureComponent {
                         defaultZoom={mapConfig.zoom}
                         provider={getProvider}
                     >
-                        {PigeonMarkers}
+                        {likesClicked ?
+                            PigeonMarkersLikes : PigeonMarkersDislikes}
                     </Map>
                 </div>
             </div>
