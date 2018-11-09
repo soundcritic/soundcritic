@@ -1,4 +1,4 @@
-let likeCoord = [
+let likeCoords = [
   53.7377611,-94.07365132,
 53.41809911,-78.05732227,
 43.28180405,-78.19672615,
@@ -1001,19 +1001,30 @@ let likeCoord = [
 36.2439207,-104.64014064
 ]
 
-let likeLat = []
-let likeLong = []
 
-for (let i = 0; i < likeCoord.length; i++){
-  if (i % 2 === 0){
-    likeLat.push(likeCoord[i])
-  } else {
-    likeLong.push(likeCoord[i])
-  }
 
+// let likeLat = []
+// let likeLong = []
+
+
+let likeLatLong = []
+
+for (let i = 0; i < likeCoords.length; i = i + 2){
+  let arr = []
+  arr.push(likeCoords[i])
+  arr.push(likeCoords[i + 1])
+  // if (i % 2 === 0){
+  //   obj.lat = likeCoords[i]
+  //   likeLat.push(likeCoords[i])
+  // } else {
+  //   obj.long = likeCoords[i]
+  //   likeLong.push(likeCoords[i])
+  // }
+  likeLatLong.push(arr)
 }
 module.exports = {
-  likeLat,
-  likeLong
+  // likeLat,
+  // likeLong
+  likeLatLong
 }
 

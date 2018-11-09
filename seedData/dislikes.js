@@ -201,18 +201,25 @@ const dislikeCoords = [
   -87.65713481
 ]
 
-let dislikeLat = []
-let dislikeLong = []
 
-for (let i = 0; i < dislikeCoords.length; i++){
-  if (i % 2 === 0){
-    dislikeLat.push(dislikeCoords[i])
-  } else {
-    dislikeLong.push(dislikeCoords[i])
-  }
+let dislikeLatLong = []
 
+
+for (let i = 0; i < dislikeCoords.length; i = i + 2){
+  let arr = []
+  arr.push(dislikeCoords[i])
+  arr.push(dislikeCoords[i + 1])
+  // if (i % 2 === 0){
+  //   obj.lat = dislikeCoords[i]
+  //   //dislikeLat.push(dislikeCoords[i])
+  // } else {
+  //   obj.long = dislikeCoords[i]
+  //   //dislikeLong.push(dislikeCoords[i])
+  // }
+  dislikeLatLong.push(arr)
 }
 module.exports = {
-  dislikeLat,
-  dislikeLong
+  // dislikeLat,
+  // dislikeLong
+  dislikeLatLong
 }
