@@ -3,13 +3,13 @@ import createLogger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
-import {artist} from './artist'
+import {oneArtist} from './artist'
 import {allAlbums, oneAlbum} from './album'
 import {allTracks, oneTrack} from './track'
-import like from './like'
-import dislike from './dislike'
+import {allLikes} from './like'
+import {allDislikes} from './dislike'
 
-const reducer = combineReducers({user, artist, allAlbums, oneAlbum, allTracks, oneTrack, like, dislike})
+const reducer = combineReducers({user, oneArtist, allAlbums, oneAlbum, allTracks, oneTrack, allLikes, allDislikes})
 
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
