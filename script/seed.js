@@ -42,7 +42,7 @@ for (let i = 0; i < dislikeLat.length; i++) {
         returning: true
       }
     )
-    await artist.addLike(createdLikes[i])
+    await artist.addDislike(createdDislikes[i])
 }
 }
 async function genNumLikesField(createdLikes) {
