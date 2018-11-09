@@ -8,8 +8,8 @@ const Track = db.define('track', {
   genre: Sequelize.STRING,
   rating: Sequelize.INTEGER,
   sliderRating: Sequelize.ARRAY(Sequelize.JSONB), //if we use JSONB we can store an object with the slider name and rating like this {name: 'guitar', 87}, but this can be restructured
-  numlikes: Sequelize.INTEGER,
-  numdislikes: Sequelize.INTEGER
+  numLikes: Sequelize.INTEGER,
+  numDislikes: Sequelize.INTEGER
 })
 
 module.exports = Track
