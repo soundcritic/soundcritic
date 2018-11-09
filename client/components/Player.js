@@ -153,8 +153,8 @@ class Player extends Component {
     }
 
     render() {
-        const { classes, theme } = this.props
-        const { currentTrack , currentTrackId, isPlaying, trackList} = this.state
+        const { classes } = this.props
+        const { currentTrack , isPlaying, trackList} = this.state
         console.log(currentTrack)
         
         if (!currentTrack.album) return <div />
@@ -173,7 +173,7 @@ class Player extends Component {
                                 image={currentTrack.album.artworkPath}
                             />
 
-                            <Typography component="h5" variant="h5">
+                            <Typography component="h5" variant="h5" title={currentTrack.album.title}>
                                 {currentTrack.album.title}
                                 </Typography>
                             <Typography variant="subtitle1" color="textSecondary">
@@ -183,18 +183,18 @@ class Player extends Component {
                     </div>
 
                     <div className={classes.controls}>
-                        <IconButton aria-label="Previous" >
-                        <LoopIcon />
+                        <IconButton aria-label="Loop" >
+                        <LoopIcon title='Repeat song' />
                         </IconButton>
                         {!isPlaying ? <IconButton aria-label="Play/pause">
-                            <PlayArrowIcon className={classes.playIcon} onClick={() => this.play(currentTrack, trackList)} />
+                            <PlayArrowIcon title='Play' className={classes.playIcon} onClick={() => this.play(currentTrack, trackList)} />
                         </IconButton> :
                         <IconButton aria-label="Play/pause">
-                        <PauseIcon className={classes.playIcon} onClick={() => this.pause()} />
+                        <PauseIcon title='Pause/Resume' className={classes.playIcon} onClick={() => this.pause()} />
                     </IconButton>
                     }
                         <IconButton aria-label="Next">
-                           <SkipNextIcon onClick={() => this.forward()} />
+                           <SkipNextIcon onClick={() => this.forward()} title='Next' />
                         </IconButton>
                     </div>
                     <hr />
