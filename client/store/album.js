@@ -39,7 +39,7 @@ export function allAlbums(state = defaultAllAlbums, action) {
       return state
   }
 }
-export function oneTrack(state = defaultOneAlbum, action) {
+export function oneAlbum(state = defaultOneAlbum, action) {
   switch (action.type) {
     case GET_ONE_ALBUM:
       return action.album

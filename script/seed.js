@@ -23,6 +23,45 @@ const tracks = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
 //   console.log('album:', album)
 // })
 
+
+
+async function genNumDislikesField(createdDislikes) {
+for (let i = 0; i < dislikeLat.length; i++) {
+  const track = await Track.findById(
+    Math.ceil(Math.random() * Math.floor(44))
+  )
+
+  await track.addDislike(createdDislikes[i])
+  let newNumDislikes = track.dataValues.numDislikes
+  newNumDislikes++
+    await Track.update(
+      {numDislikes: newNumDislikes},
+      {
+        where: {id: track.id},
+        returning: true
+      }
+    )
+}
+}
+async function genNumLikesField(createdLikes) {
+for (let i = 0; i < likeLat.length; i++) {
+  const track = await Track.findById(
+    Math.ceil(Math.random() * Math.floor(44))
+  )
+
+  await track.addLike(createdLikes[i])
+  let newNumLikes = track.dataValues.numLikes
+  newNumLikes++
+    await Track.update(
+      {numLikes: newNumLikes},
+      {
+        where: {id: track.id},
+        returning: true
+      }
+    )
+  }
+}
+
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
@@ -148,40 +187,10 @@ async function seed() {
     createdDislikes.push(newDislike)
   }
 
-  for (let i = 0; i < likeLat.length; i++) {
-    const track = await Track.findById(
-      Math.ceil(Math.random() * Math.floor(44))
-    )
+    await genNumLikesField(createdLikes)
+    await genNumDislikesField(createdDislikes)
 
-    await track.addLike(createdLikes[i])
-    let newNumLikes = track.dataValues.numLikes
-    newNumLikes++
-      await Track.update(
-        {numLikes: newNumLikes},
-        {
-          where: {id: track.id},
-          returning: true
-        }
-      )
 
-  }
-
-  for (let i = 0; i < dislikeLat.length; i++) {
-    const track = await Track.findById(
-      Math.ceil(Math.random() * Math.floor(44))
-    )
-
-    await track.addDislike(createdDislikes[i])
-    let newNumDislikes = track.dataValues.numDislikes
-    newNumDislikes++
-      await Track.update(
-        {numDislikes: newNumDislikes},
-        {
-          where: {id: track.id},
-          returning: true
-        }
-      )
-  }
   console.log(`seeded successfully`)
 }
 
