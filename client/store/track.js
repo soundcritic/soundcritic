@@ -28,7 +28,7 @@ export const fetchOneTrack = trackId => async dispatch => {
 }
 
 export const fetchOneTrackSelector = (numOfTracks) => async dispatch => {
-  let randomNumber = Math.ceil(Math.random() * Math.floor(numOfTracks))
+  const randomNumber = Math.ceil(Math.random() * Math.floor(numOfTracks))
   const testNumber = Math.ceil(Math.random() * Math.floor(100))
 
   const response = await axios.get(`/api/tracks/${randomNumber}`)
