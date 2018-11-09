@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import {connect} from 'react-redux'
+import {fetchOneTrackSelector, fetchAllTracks} from '../store'
 
 import { withStyles } from '@material-ui/core/styles'
 
@@ -137,13 +139,17 @@ class Player extends Component {
         }
     }
 
+
+
     async componentDidMount() {
         try {
+
             let { data } = await axios.get('/api/tracks')
             const rand = Math.ceil(Math.random() * Math.floor(data.length + 1))
             data = this.shuffleTracks(data)
 
             this.setState({
+
                 currentTrack: data[rand],
                 trackList: data
             })
@@ -156,7 +162,7 @@ class Player extends Component {
         const { classes } = this.props
         const { currentTrack , isPlaying, trackList} = this.state
         console.log(currentTrack)
-        
+
         if (!currentTrack.album) return <div />
 
         return (
@@ -213,4 +219,6 @@ class Player extends Component {
 }
 
 
-export default withStyles(styles, { withTheme: true })(Player)
+
+
+export default connect(null, {fetchOneTrackSelector, fetchAllTracks})(withStyles(styles, { withTheme: true })(Player))

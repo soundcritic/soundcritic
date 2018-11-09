@@ -4,6 +4,7 @@ import { withRouter, Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { Login, Signup, UserHome, Player, ArtistView, SingleAlbumView } from './components'
 import { me } from './store'
+import testIterator from './components/testIterator';
 
 /**
  * COMPONENT
@@ -20,6 +21,7 @@ class Routes extends Component {
       <Switch>
         <Route exact path="/" component={Player} />
         <Route exact path="/albums" component={ArtistView} />
+        <Route exact path="/test" component={testIterator} />
         <Route exact path="/albums/:id" component={SingleAlbumView} />
         <Route component={Player} />
       </Switch>

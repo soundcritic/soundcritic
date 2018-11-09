@@ -25,4 +25,25 @@ router.get('/:artistId', async (req, res, next) => {
     } catch (err) { next(err) }
   })
 
+//POST /api/likes
+router.post('/', async (req, res, next) => {
+  try {
+    console.log('hi')
+    const {latlong, track} = req.body
+    const newLike = await Like.create({
+      latlong,
+      trackId: track.id,
+      artistId: track.artistId
+    })
+    console.log(track);
+    ///make associations
+
+    res.json(newLike)
+  } catch (err) {
+    next(err)
+  }
+})
+
+
+
 module.exports = router

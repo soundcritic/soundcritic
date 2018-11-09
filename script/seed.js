@@ -67,6 +67,21 @@ for (let i = 0; i < likeLatLong.length; i++) {
   }
 }
 
+async function genRating(createdTracks) {
+  console.log(createdTracks.length);
+   for (let i = 0; i < createdTracks.length; i++) {
+     const track = await Track.findById(i + 1)
+
+    await Track.update(
+      {rating:  ((track.numLikes/(track.numLikes+track.numDislikes))*100)},
+      {
+        where: {id: i + 1},
+        returning: true
+      }
+    )
+   }
+}
+
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
@@ -192,7 +207,7 @@ async function seed() {
 
     await genNumLikesField(createdLikes)
     await genNumDislikesField(createdDislikes)
-
+    await genRating(createdTracks)
 
   console.log(`seeded successfully`)
 }

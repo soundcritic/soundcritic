@@ -2,12 +2,18 @@ import axios from 'axios'
 
 //ACTION TYPES
 const GET_ALL_LIKES = 'GET_ALL_LIKES'
+const ADD_LIKE = 'ADD_LIKE'
+
 const GET_ARTIST_LIKES = 'GET_ARTIST_LIKES'
 
 //ACTION CREATORS
 export const setAllLikes = likes => ({
   type: GET_ALL_LIKES,
   likes
+})
+export const addLike = like => ({
+  type: ADD_LIKE,
+  like
 })
 
 export const artistLikes = likes => ({
@@ -20,6 +26,13 @@ export const fetchAllLikes = () => async dispatch => {
   const response = await axios.get('/api/likes')
   const likes = response.data
   dispatch(setAllLikes(likes))
+}
+export const postLike = data => {
+  return async dispatch => {
+    const response = await axios.post('/api/likes', data)
+    const newLike = response.data
+    //dispatch(addLike(newLike))
+  }
 }
 
 export const getArtistLikes = (id) => async dispatch => {
@@ -34,6 +47,8 @@ export function allLikes(state = defaultAllLikes, action) {
   switch (action.type) {
     case GET_ALL_LIKES:
       return action.likes
+    case ADD_LIKE:
+      return [...state, action.like]
     default:
       return state
   }

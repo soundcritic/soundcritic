@@ -16,13 +16,31 @@ router.get('/', async (req, res, next) => {
 
 //GET dislikes for single album (sum dislikes of all the tracks)
 //GET /api/
+
 router.get('/:artistId', async (req, res, next) => {
-    try {
-        const dislikesByArtist = await Dislike.findAll({ where: { artistId: req.params.artistId } }, {
-            include: [Artist, { model: Track }]
-        })
-        res.json(dislikesByArtist)
-    } catch (err) { next(err) }
+  try {
+    const dislikesByArtist = await Dislike.findAll({ where: { artistId: req.params.artistId } }, {
+      include: [Artist, { model: Track }]
+    })
+    res.json(dislikesByArtist)
+  } catch (err) { next(err) }
+})
+
+//POST /api/dislikes
+router.post('/', async (req, res, next) => {
+  try {
+    const {latlong, track} = req.body
+
+
+    const newLike = await Dislike.create({
+      latlong
+    })
+    ///make associations
+
+    res.json(newLike)
+  } catch (err) {
+    next(err)
+  }
 })
 
 module.exports = router

@@ -20,4 +20,14 @@ router.get('/', async (req, res, next) => {
     } catch (err) { next(err) }
   })
 
+  router.get('/:id', async (req, res, next) => {
+    try {
+      const track = await Track.findById(req.params.id)
+      //console.log(track);
+      res.json(track)
+    } catch (err) {
+      next(err)
+    }
+  })
+
   module.exports = router
