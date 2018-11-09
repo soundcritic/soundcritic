@@ -11,8 +11,8 @@ const {
 } = require('../server/db/models')
 const {likeLatLong} = require('../seedData/likes')
 const {dislikeLatLong} = require('../seedData/dislikes')
-const likes = require('../seedData/likes')
-const dislikes = require('../seedData/dislikes')
+// const likes = require('../seedData/likes')
+// const dislikes = require('../seedData/dislikes')
 const tracks = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
 //const albums = JSON.parse(fs.readFileSync('./seedData/albums.json', 'utf8'))
 // const artists = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
@@ -181,8 +181,8 @@ async function seed() {
         albumId: albums[track.album].id,
         artistId: artists[track.artist].id,
         genre: track.genre,
-        numLikes: 0,
-        numDislikes: 0,
+        numLikes: 1,
+        numDislikes: 1,
         rating: 0
       })
       createdTracks.push(createdTrack)
