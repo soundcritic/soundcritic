@@ -9,8 +9,10 @@ const {
   Dislike,
   Slider
 } = require('../server/db/models')
-const {lat, long} = require('../seedData/latlong')
+const {likeLat, likeLong} = require('../seedData/likes')
+const {dislikeLat, dislikeLong} = require('../seedData/dislikes')
 const likes = require('../seedData/likes')
+const dislikes = require('../seedData/dislikes')
 const tracks = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
 //const albums = JSON.parse(fs.readFileSync('./seedData/albums.json', 'utf8'))
 // const artists = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
@@ -129,24 +131,24 @@ let createdTracks = []
     })
   )
 let createdLikes = []
-  for (let i = 0; i < lat.length; i++) {
+  for (let i = 0; i < likeLat.length; i++) {
     let newLike = await Like.create({
-      lat: lat[i],
-      long: long[i]
+      lat: likeLat[i],
+      long: likeLong[i]
     })
     createdLikes.push(newLike)
   }
 
-  // let createdDislikes = []
-  // for (let i = 0; i < lat.length; i++) {
-  //   let newDislike = await Dislike.create({
-  //     lat: lat[i],
-  //     long: long[i]
-  //   })
-  //   createdLikes.push(newDislike)
-  // }
+  let createdDislikes = []
+  for (let i = 0; i < dislikeLat.length; i++) {
+    let newDislike = await Dislike.create({
+      lat: dislikeLat[i],
+      long: dislikeLong[i]
+    })
+    createdDislikes.push(newDislike)
+  }
 
-  for (let i = 0; i < lat.length; i++) {
+  for (let i = 0; i < likeLat.length; i++) {
     const track = await Track.findById(Math.ceil(Math.random() * Math.floor(44)))
 
     await track.addLike(createdLikes[i])
@@ -154,13 +156,13 @@ let createdLikes = []
 
   }
 
-  // for (let i = 0; i < lat.length; i++) {
-  //   const track = await Track.findById(Math.ceil(Math.random() * Math.floor(44)))
+  for (let i = 0; i < dislikeLat.length; i++) {
+    const track = await Track.findById(Math.ceil(Math.random() * Math.floor(44)))
 
-  //   await track.addDislike(createdDislikes[i])
+    await track.addDislike(createdDislikes[i])
 
 
-  // }
+  }
 
 
   console.log(`seeded successfully`)
