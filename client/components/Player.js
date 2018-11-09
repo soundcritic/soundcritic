@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 
 import { withStyles } from '@material-ui/core/styles'
 
@@ -8,11 +9,22 @@ import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow'
+import PauseIcon from '@material-ui/icons/Pause'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import ThumbsUpIcon from "@material-ui/icons/ThumbUp";
-import ThumbsDownIcon from "@material-ui/icons/ThumbDown";
+import ThumbsDownIcon from "@material-ui/icons/ThumbDown"
+import LoopIcon from "@material-ui/icons/Loop"
 
+const AUDIO = document.createElement('audio')
+const mod = (num, m) => ((num % m) + m) % m
+
+const skip = (interval, { trackList, currentTrack }) => {
+    let idx = trackList.map(song => song.id).indexOf(currentTrack.id)
+    idx = mod(idx + interval, trackList.length)
+    const next = trackList[idx]
+    return [next, trackList]
+}
 
 import PropTypes from 'prop-types'
 
@@ -27,11 +39,11 @@ const styles = theme => ({
         backgroundColor: 'orange',
         margin: '0 auto'
     },
-      details: {
-          display: 'flex',
-          flexDirection: 'column',
-          textAlign: '-webkit-center'
-      },
+    details: {
+        display: 'flex',
+        flexDirection: 'column',
+        textAlign: '-webkit-center'
+    },
     content: {
         flex: '1 0 auto',
     },
@@ -52,7 +64,7 @@ const styles = theme => ({
         width: 38,
     },
     likeDislike: {
-        display: 'flex', 
+        display: 'flex',
         justifyContent: 'space-evenly',
     }
 })
@@ -61,46 +73,128 @@ class Player extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            //something
+            currentTrack: {},
+            trackList: [],
+            isPlaying: false,
+            currentTrackId: 0,
+        }
+    }
+
+    shuffleTracks(array) {
+        let currentIndex = array.length,
+            temporaryValue,
+            randomIndex
+
+        while (0 !== currentIndex) {
+            randomIndex = Math.floor(Math.random() * currentIndex)
+            currentIndex -= 1
+
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+        return array;
+    }
+
+    play = (song, trackList) => {
+        AUDIO.src = song.audioPath
+        AUDIO.load()
+        AUDIO.play()
+        this.setState({
+            currentTrackId: song.id,
+            isPlaying: true,
+            trackList
+        })
+    }
+
+    pause = () => {
+        AUDIO.pause()
+        this.setState({
+            isPlaying: false
+        })
+    }
+
+    forward = () => {
+        const { currentTrackId, trackList } = this.state
+        const current = trackList.map(track => track.id).indexOf(currentTrackId)
+        const next = current + 1
+
+        if (next > trackList.length) {
+            AUDIO.pause()
+            AUDIO.src= ''
+            this.setState({
+                isPlaying: false,
+                currentTrackId: 0,
+                trackList: []
+            })
+        } else {
+            AUDIO.pause()
+            this.play(trackList[next], trackList)
+            this.setState({
+                currentTrackId: next,
+                currentTrack: trackList[next]
+            })
+        }
+    }
+
+    async componentDidMount() {
+        try {
+            let { data } = await axios.get('/api/tracks')
+            const rand = Math.ceil(Math.random() * Math.floor(data.length + 1))
+            data = this.shuffleTracks(data)
+
+            this.setState({
+                currentTrack: data[rand],
+                trackList: data
+            })
+        } catch (err) {
+            console.error(err)
         }
     }
 
     render() {
         const { classes, theme } = this.props
+        const { currentTrack , currentTrackId, isPlaying, trackList} = this.state
+        console.log(currentTrack)
         
+        if (!currentTrack.album) return <div />
+
         return (
             <div className={classes.container}>
 
                 <Card className={classes.card}>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                        <Typography component="h5" variant="h5">
-                            90%
+                            <Typography component="h5" variant="h5">
+                                90%
                         </Typography>
-                        <CardMedia
-                            className={classes.cover}
-                            image="https://bit.ly/2PmhsBh"
-                            //title="Live from space album cover"
-                        />
-                       
-                                <Typography component="h5" variant="h5">
-                                    Happy Little Trees
+                            <CardMedia
+                                className={classes.cover}
+                                image={currentTrack.album.artworkPath}
+                            />
+
+                            <Typography component="h5" variant="h5">
+                                {currentTrack.album.title}
                                 </Typography>
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    Bob Ross
+                            <Typography variant="subtitle1" color="textSecondary">
+                                {currentTrack.artist.name}
                                 </Typography>
-                            </CardContent>
-                        </div>
+                        </CardContent>
+                    </div>
 
                     <div className={classes.controls}>
-                        <IconButton aria-label="Previous" > 
-                            {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
+                        <IconButton aria-label="Previous" >
+                        <LoopIcon />
                         </IconButton>
+                        {!isPlaying ? <IconButton aria-label="Play/pause">
+                            <PlayArrowIcon className={classes.playIcon} onClick={() => this.play(currentTrack, trackList)} />
+                        </IconButton> :
                         <IconButton aria-label="Play/pause">
-                            <PlayArrowIcon className={classes.playIcon} />
-                        </IconButton>
+                        <PauseIcon className={classes.playIcon} onClick={() => this.pause()} />
+                    </IconButton>
+                    }
                         <IconButton aria-label="Next">
-                            {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
+                           <SkipNextIcon onClick={() => this.forward()} />
                         </IconButton>
                     </div>
                     <hr />
@@ -117,11 +211,6 @@ class Player extends Component {
         )
     }
 }
-
-Player.propTypes = {
-    classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
-};
 
 
 export default withStyles(styles, { withTheme: true })(Player)
