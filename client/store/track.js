@@ -28,8 +28,18 @@ export const fetchOneTrack = trackId => async dispatch => {
 }
 
 export const fetchOneTrackSelector = (numOfTracks) => async dispatch => {
+  let randomNumber = Math.ceil(Math.random() * Math.floor(numOfTracks))
+  const testNumber = Math.ceil(Math.random() * Math.floor(100))
 
-  const
+  const response = await axios.get(`/api/tracks/${randomNumber}`)
+  const track = response.data
+
+  if (track.rating >= testNumber) {
+    dispatch(setOneTrack(track))
+  } else {
+    fetchOneTrackSelector(numOfTracks)
+  }
+
 }
 
 let defaultAllTracks = []
@@ -47,7 +57,7 @@ export function allTracks(state = defaultAllTracks, action) {
 
 export function oneTrack(state = defaultOneTrack, action) {
   switch (action.type) {
-    case GET_ALL_TRACKS:
+    case GET_ONE_TRACK:
       return action.track
     default:
       return state
