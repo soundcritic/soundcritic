@@ -9,8 +9,8 @@ const {
   Dislike,
   Slider
 } = require('../server/db/models')
-const {likeLat, likeLong} = require('../seedData/likes')
-const {dislikeLat, dislikeLong} = require('../seedData/dislikes')
+const {likeLatLong} = require('../seedData/likes')
+const {dislikeLatLong} = require('../seedData/dislikes')
 const likes = require('../seedData/likes')
 const dislikes = require('../seedData/dislikes')
 const tracks = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
@@ -26,7 +26,7 @@ const tracks = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
 
 
 async function genNumDislikesField(createdDislikes) {
-for (let i = 0; i < dislikeLat.length; i++) {
+for (let i = 0; i < dislikeLatLong.length; i++) {
   const track = await Track.findById(
     Math.ceil(Math.random() * Math.floor(44))
   )
@@ -46,7 +46,7 @@ for (let i = 0; i < dislikeLat.length; i++) {
 }
 }
 async function genNumLikesField(createdLikes) {
-for (let i = 0; i < likeLat.length; i++) {
+for (let i = 0; i < likeLatLong.length; i++) {
   const track = await Track.findById(
     Math.ceil(Math.random() * Math.floor(44))
   )
@@ -190,19 +190,17 @@ async function seed() {
     })
   )
   let createdLikes = []
-  for (let i = 0; i < likeLat.length; i++) {
+  for (let i = 0; i < likeLatLong.length; i++) {
     let newLike = await Like.create({
-      lat: likeLat[i],
-      long: likeLong[i]
+      latlong: likeLatLong[i]
     })
     createdLikes.push(newLike)
   }
 
   let createdDislikes = []
-  for (let i = 0; i < dislikeLat.length; i++) {
+  for (let i = 0; i < dislikeLatLong.length; i++) {
     let newDislike = await Dislike.create({
-      lat: dislikeLat[i],
-      long: dislikeLong[i]
+      latlong: dislikeLatLong[i]
     })
     createdDislikes.push(newDislike)
   }

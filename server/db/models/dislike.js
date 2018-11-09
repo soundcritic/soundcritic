@@ -9,8 +9,7 @@ const db = require('../db')
 //onpositionedRecieved returns on object with lat and long on it
 //so we will store it as a JSONB
 const Dislike = db.define('dislike', {
-  lat: Sequelize.FLOAT,
-  long: Sequelize.FLOAT
+  latlong: Sequelize.ARRAY(Sequelize.FLOAT)
 })
 
 module.exports = Dislike
