@@ -4,6 +4,7 @@ import axios from 'axios'
 const GET_ALL_LIKES = 'GET_ALL_LIKES'
 const ADD_LIKE = 'ADD_LIKE'
 
+const GET_ARTIST_LIKES = 'GET_ARTIST_LIKES'
 
 //ACTION CREATORS
 export const setAllLikes = likes => ({
@@ -13,6 +14,11 @@ export const setAllLikes = likes => ({
 export const addLike = like => ({
   type: ADD_LIKE,
   like
+})
+
+export const artistLikes = likes => ({
+  type: GET_ARTIST_LIKES,
+  likes
 })
 
 //THUNK CREATORS
@@ -27,6 +33,11 @@ export const postLike = data => {
     const newLike = response.data
     //dispatch(addLike(newLike))
   }
+}
+
+export const getArtistLikes = (id) => async dispatch => {
+  const { data } = await axios.get(`/api/likes/${id}`)
+  dispatch(setAllLikes(data))
 }
 
 let defaultAllLikes = []

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import AllAlbums from "./AllAlbums"
-import Popularity from "./Popularity";
-import PropTypes from 'prop-types'
+import PopularityMap from "./PopularityMap";
+import { connect } from 'react-redux'
+import { fetchOneArtist } from "../store/artist";
 
 
 import { withStyles } from '@material-ui/core/styles'
@@ -29,15 +30,13 @@ class ArtistView extends Component {
         return (
             <div className={classes.container}>
                 <AllAlbums />
-                <Popularity />
+                <PopularityMap />
             </div>
         )
     }
 }
 
 
-ArtistView.propTypes = {
-    classes: PropTypes.object.isRequired,
-}
 
-export default withStyles(styles)(ArtistView)
+
+export default connect(null, { fetchOneArtist })(withStyles(styles)(ArtistView))

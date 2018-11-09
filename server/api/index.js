@@ -5,8 +5,9 @@ module.exports = router
 
 router.use('/albums', require('./albums'))
 router.use('/tracks', require('./tracks'))
-router.use('./likes', require('./likes'))
-router.use('./dislikes', require('./dislikes'))
+router.use('/artists', require('./artists'))
+router.use('/likes', require('./likes'))
+router.use('/dislikes', require('./dislikes'))
 
 router.use((req, res, next) => {
   const error = new Error('Not Found')

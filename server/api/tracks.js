@@ -23,7 +23,7 @@ router.get('/', async (req, res, next) => {
   router.get('/:id', async (req, res, next) => {
     try {
       const track = await Track.findById(req.params.id)
-      console.log(track);
+      //console.log(track);
       res.json(track)
     } catch (err) {
       next(err)
