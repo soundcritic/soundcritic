@@ -4,6 +4,7 @@ module.exports = router
 //router.use('/users', require('./users'))
 
 router.use('/albums', require('./albums'))
+router.use('/tracks', require('./tracks'))
 router.use('./likes', require('./likes'))
 router.use('./dislikes', require('./dislikes'))
 
