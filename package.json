@@ -43,8 +43,6 @@
     "compression": "^1.7.3",
     "connect-session-sequelize": "^4.1.0",
     "contentful": "^7.0.5",
-    "d3-geo": "^1.11.1",
-    "d3-shape": "^1.2.2",
     "express": "^4.16.3",
     "express-session": "^1.15.1",
     "file-loader": "^2.0.0",
