@@ -34,7 +34,7 @@ class testIterator extends Component {
     }
   }//
   dayIterator = async () => {
-    for (i=0; i<20; i++){
+    for (let i=0; i<20; i++){
     //select a track with selector thunk
     let numOfTracks = this.props.allTracks.length
     this.props.fetchOneTrackSelector(numOfTracks)
