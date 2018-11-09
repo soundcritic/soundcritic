@@ -30,6 +30,7 @@ for (let i = 0; i < dislikeLat.length; i++) {
   const track = await Track.findById(
     Math.ceil(Math.random() * Math.floor(44))
   )
+  const artist = await Artist.findById(track.artistId)
 
   await track.addDislike(createdDislikes[i])
   let newNumDislikes = track.dataValues.numDislikes
@@ -41,6 +42,7 @@ for (let i = 0; i < dislikeLat.length; i++) {
         returning: true
       }
     )
+    await artist.addLike(createdLikes[i])
 }
 }
 async function genNumLikesField(createdLikes) {
@@ -48,6 +50,7 @@ for (let i = 0; i < likeLat.length; i++) {
   const track = await Track.findById(
     Math.ceil(Math.random() * Math.floor(44))
   )
+    const artist = await Artist.findById(track.artistId)
 
   await track.addLike(createdLikes[i])
   let newNumLikes = track.dataValues.numLikes
@@ -59,6 +62,8 @@ for (let i = 0; i < likeLat.length; i++) {
         returning: true
       }
     )
+    await artist.addLike(createdLikes[i])
+
   }
 }
 

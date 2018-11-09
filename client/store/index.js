@@ -18,8 +18,8 @@ const store = createStore(reducer, middleware)
 
 export default store
 export * from './user'
-// export * from './artist'
-// export * from './album'
-// export * from './track'
-// export * from './like'
-// export * from './dislike'
+export * from './artist'
+export * from './album'
+export * from './track'
+export * from './like'
+export * from './dislike'
