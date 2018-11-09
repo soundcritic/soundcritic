@@ -2,7 +2,7 @@ import axios from 'axios'
 
 //ACTION TYPES
 const GET_ALL_TRACKS = 'GET_ALL_TRACKS'
-const GET_ONE_TRACK = 'GET_ONE_TRACK'
+const SET_ONE_TRACK = 'GET_ONE_TRACK'
 
 //ACTION CREATORS
 export const setAllTracks = tracks => ({
@@ -10,7 +10,7 @@ export const setAllTracks = tracks => ({
   tracks
 })
 export const setOneTrack = track => ({
-  type: GET_ONE_TRACK,
+  type: SET_ONE_TRACK,
   track
 })
 
@@ -33,7 +33,7 @@ export const fetchOneTrackSelector = (numOfTracks) => async dispatch => {
 
   const response = await axios.get(`/api/tracks/${randomNumber}`)
   const track = response.data
-
+  console.log(track);
   if (track.rating >= testNumber) {
     dispatch(setOneTrack(track))
   } else {
@@ -57,7 +57,7 @@ export function allTracks(state = defaultAllTracks, action) {
 
 export function oneTrack(state = defaultOneTrack, action) {
   switch (action.type) {
-    case GET_ONE_TRACK:
+    case SET_ONE_TRACK:
       return action.track
     default:
       return state
