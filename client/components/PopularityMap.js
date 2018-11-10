@@ -28,12 +28,11 @@ class PopularityMap extends PureComponent {
     constructor() {
         super()
         this.state = {
-            likes: [],
-            dislikes: [],
             likesClicked: false,
             disLikesClicked: false
         }
     }
+<<<<<<< HEAD
     async componentDidMount() {
         const { data } = await axios.get(`/api/likes/album/${3}`)
         console.log(data);
@@ -46,6 +45,8 @@ class PopularityMap extends PureComponent {
             dislikes: res.data
         })
     }
+=======
+>>>>>>> master
 
     onMarkerClick = (evt) => {
         console.log(evt.payload);
@@ -61,8 +62,8 @@ class PopularityMap extends PureComponent {
 
     render() {
         const getProvider = (x, y, z) => `https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/${z}/${x}/${y}.png`;
-        const { classes } = this.props
-        const { likes, dislikes, likesClicked } = this.state
+        const { classes, likes, dislikes } = this.props
+        const { likesClicked } = this.state
         const mapConfig = {
             center: [41.850033, -87.6500523],
             zoom: 4
