@@ -11,12 +11,12 @@ Track.hasMany(Like)
 Dislike.belongsTo(Track)
 Track.hasMany(Dislike)
 ///////////////////////////
-// Like.belongsTo(Artist, {through: 'trackId'})
-// Artist.hasMany(Like)
+Like.belongsTo(Album)
+Album.hasMany(Like)
 
-// Dislike.belongsTo(Artist, {foreignKey: 'trackId'})
-// Artist.hasMany(Dislike)
-
+Dislike.belongsTo(Album)
+Album.hasMany(Dislike)
+///////////////////////////
 Like.belongsTo(Artist)
 Artist.hasMany(Like)
 

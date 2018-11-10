@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Artist, Track, Like} = require('../db/models')
+const {Artist, Track, Like, Album} = require('../db/models')
 
 
 //GET likes for single track
@@ -12,11 +12,18 @@ router.get('/', async (req, res, next) => {
       res.json(likes)
     } catch (err) { next(err) }
   })
+//GET likes for single album(sum likes of all the tracks on single the album)
+//GET /api/likes/album/:artistId
+router.get('/album/:albumId', async (req, res, next) => {
+  try {
+    const likesByAlbum = await Like.findAll({where: {albumId: req.params.albumId}})
+    res.json(likesByAlbum)
+  } catch (err) { next(err) }
+})
 
-
-//GET likes for single album (sum dislikes of all the tracks)
-//GET /api/
-router.get('/:artistId', async (req, res, next) => {
+//GET likes for single artist(sum likes of all the tracks on all the album)
+//GET /api/likes/artist/:artistId
+router.get('/artist/:artistId', async (req, res, next) => {
     try {
       const likesByArtist = await Like.findAll({where: {artistId: req.params.artistId}}, {
         include: [Artist, {model: Track}]

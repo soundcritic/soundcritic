@@ -14,10 +14,10 @@ router.get('/', async (req, res, next) => {
 })
 
 
-//GET dislikes for single album (sum dislikes of all the tracks)
-//GET /api/
+//GET dislikes for single album (sum dislikes of all the tracks on all albums)
+//GET /api/dislikes/
 
-router.get('/:artistId', async (req, res, next) => {
+router.get('/artist/:artistId', async (req, res, next) => {
   try {
     const dislikesByArtist = await Dislike.findAll({ where: { artistId: req.params.artistId } }, {
       include: [Artist, { model: Track }]
