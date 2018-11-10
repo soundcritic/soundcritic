@@ -1,6 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-
+import { Link } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -27,7 +26,9 @@ const styles = {
 
 
 const AllAlbums = (props) => {
-    const { classes } = props
+    const { classes, artist } = props
+
+    if (!artist.id) return <div />
 
     return (
         <div>
@@ -35,31 +36,21 @@ const AllAlbums = (props) => {
                 My Albums
             </Typography>
             <div className={classes.cardGrid}>
-                <Card className={classes.card}>
-                    <img className={classes.cover} src='https://bit.ly/2OwkSfv' />
-                    <Typography component="h5">
-                        Won't You Be My Neighbor?
-                    </Typography>
-                </Card>
-                <Card className={classes.card}>
-                    <img className={classes.cover} src='https://bit.ly/2OwkSfv' />
-                    <Typography component="h5" >
-                        Won't You Be My Neighbor?
-                    </Typography>
-                </Card>
-                <Card className={classes.card}>
-                    <img className={classes.cover} src='https://bit.ly/2OwkSfv' />
-                    <Typography component="h5">
-                        Won't You Be My Neighbor?
-                    </Typography>
-                </Card>
+                {artist.albums.map(album => {
+                    return (
+                        <Link to={`/albums/${album.id}`} key={album.id}>
+                            <Card className={classes.card}  >
+                                <img className={classes.cover} src={album.artworkPath} />
+                                <Typography component="h5">
+                                    {album.title}
+                                </Typography>
+                            </Card>
+                        </Link>
+                    )
+                })}
             </div>
         </div>
     )
-}
-
-AllAlbums.propTypes = {
-    classes: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(AllAlbums)
