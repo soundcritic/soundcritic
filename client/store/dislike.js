@@ -15,17 +15,30 @@ export const addDislike = dislike => ({
 })
 
 //THUNK CREATORS
-export const fetchAllDislikes = () => async dispatch => {
-  const response = await axios.get('/api/dislikes')
-  const dislikes = response.data
-  dispatch(setAllDislikes(dislikes))
-}
 export const postDislike = data => {
   return async dispatch => {
     const response = await axios.post('/api/dislikes', data)
     const newDislike = response.data
-    //dispatch(addDislike(newDislike))
+    dispatch(addDislike(newDislike))
   }
+}
+export const fetchAllDislikes = () => async dispatch => {
+  const {data} = await axios.get('/api/dislikes')
+  dispatch(setAllDislikes(data))
+}
+export const getTrackDislikes = id => async dispatch => {
+  const {data} = await axios.get(`/api/dislikes/track/${id}`)
+  dispatch(setAllDislikes(data))
+}
+
+export const getAlbumDislikes = id => async dispatch => {
+  const {data} = await axios.get(`/api/dislikes/album/${id}`)
+  dispatch(setAllDislikes(data))
+}
+
+export const getArtistDislikes = id => async dispatch => {
+  const {data} = await axios.get(`/api/dislikes/artist/${id}`)
+  dispatch(setAllDislikes(data))
 }
 
 

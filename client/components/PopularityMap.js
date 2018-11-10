@@ -7,11 +7,10 @@ import Typography from '@material-ui/core/Typography'
 import Map from 'pigeon-maps'
 import Marker from 'pigeon-marker'
 
-import axios from 'axios'
-
 const styles = (theme) => ({
     title: {
-        marginTop: '10px'
+        marginTop: '10px',
+        color: 'azure'
     },
     button: {
         margin: theme.spacing.unit,
@@ -19,9 +18,6 @@ const styles = (theme) => ({
     input: {
         display: 'none',
     },
-    map: {
-        width: '50%',
-    }
 })
 
 class PopularityMap extends PureComponent {
@@ -38,17 +34,17 @@ class PopularityMap extends PureComponent {
     }
 
     handleLikesClicked = () => {
-        this.setState({likesClicked: true, disLikesClicked: false})
+        this.setState({ likesClicked: true, disLikesClicked: false })
     }
 
     handleDislikesClicked = () => {
-        this.setState({likesClicked: false, disLikesClicked: true})
+        this.setState({ likesClicked: false, disLikesClicked: true })
     }
 
     render() {
         const getProvider = (x, y, z) => `https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/${z}/${x}/${y}.png`;
         const { classes, likes, dislikes } = this.props
-        const { likesClicked } = this.state
+        const { disLikesClicked } = this.state
         const mapConfig = {
             center: [41.850033, -87.6500523],
             zoom: 4
@@ -67,7 +63,7 @@ class PopularityMap extends PureComponent {
                     <Typography component="h5" variant="h5" className={classes.title}>
                         Popularity By Region
                     </Typography>
-                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <Button variant="outlined" className={classes.button} onClick={this.handleLikesClicked}>
                             Likes
                         </Button>
@@ -76,15 +72,15 @@ class PopularityMap extends PureComponent {
                         </Button>
                     </div>
                 </div>
-                <div className={classes.map}>
+                <div >
                     <Map
-                        width={window.innerWidth}
+                        width={800}
                         height={600}
                         defaultCenter={mapConfig.center}
                         defaultZoom={mapConfig.zoom}
                         provider={getProvider}
                     >
-                        {likesClicked ?
+                        {disLikesClicked ?
                             PigeonMarkersLikes : PigeonMarkersDislikes}
                     </Map>
                 </div>
