@@ -49,13 +49,16 @@ class PopularityMap extends PureComponent {
             center: [41.850033, -87.6500523],
             zoom: 4
         }
-
+        // if(likes.length === 0 || dislikes.length === 0){
+        //   return <div/>
+        // }
         const PigeonMarkersLikes = likes.map(marker => (
             <Marker key={marker.id} anchor={marker.latlong} payload={1} onClick={this.onMarkerClick} />
         ))
         const PigeonMarkersDislikes = dislikes.map(marker => (
             <Marker key={marker.id} anchor={marker.latlong} payload={1} onClick={this.onMarkerClick} />
         ))
+
 
         return (
             <div >

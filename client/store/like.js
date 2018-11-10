@@ -22,12 +22,13 @@ export const artistLikes = likes => ({
 })
 
 //THUNK CREATORS
-export const postLike = data => {
-  return async dispatch => {
+export const postLike = data => async dispatch => {
+    console.log('thunk')
     const response = await axios.post('/api/likes', data)
     const newLike = response.data
+    console.log('newLike', newLike)
     dispatch(addLike(newLike))
-  }
+
 }
 export const fetchAllLikes = () => async dispatch => {
   const response = await axios.get('/api/likes')

@@ -34,47 +34,61 @@ class DayIterator extends Component {
     }
   } //
   dayIterator = async () => {
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 30; i++) {
       //select a track with selector thunk
       let numOfTracks = this.props.allTracks.length
-      this.props.fetchOneTrackSelector(numOfTracks)
+      await this.props.fetchOneTrackSelector(numOfTracks)
 
       //choose to like or dislike
       const randomNumber = Math.ceil(Math.random() * Math.floor(100))
       const latlong = genLatLong()
       let data = {
         latlong: latlong,
-        track: this.props.oneTrack
+        trackData: this.props.oneTrack
       }
       console.log(randomNumber)
-      if (randomNumber > 40) {
+      console.log(this.props)
+      if (this.props.oneTrack.rating < 50){
+
+        if (randomNumber > 50) {
+          //POST like
+          this.props.postLike(data)
+          //genNumDislikesField(latlong)
+        } else {
+          //POST dislike
+          this.props.postDislike(data)
+        }
+      }
+  if (this.props.oneTrack.rating >= 50) {
+
+      if (randomNumber > 80) {
         //POST like
-        //this.props.postLike(data)
-        await axios.post('/api/likes', data)
+        this.props.postLike(data)
+        //genNumDislikesField(latlong)
       } else {
         //POST dislike
-        await axios.post('/api/dislikes', data)
-        //this.props.postDislike(data)
+        this.props.postDislike(data)
       }
     }
+  }
   }
 
   render() {
     return (
-
-        <button type="button" onClick={() => this.dayIterator()}>
-          Iterate Day
-        </button>
-
+      <button type="button" onClick={() => this.dayIterator()}>
+        Iterate Day
+      </button>
     )
   }
 }
 
 const mapState = state => {
-  const {oneTrack, allTracks} = state
+  const {oneTrack, allTracks, allLikes, allDislikes} = state
   return {
     oneTrack,
-    allTracks
+    allTracks,
+    allLikes,
+    allDislikes
   }
 }
 

@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Artist, Track, Dislike} = require('../db/models')
+const {Artist, Track, Dislike, Album} = require('../db/models')
 
 //GET dislikes for single track
 //GET /api/
@@ -58,12 +58,39 @@ router.get('/artist/:artistId', async (req, res, next) => {
 //POST /api/dislikes
 router.post('/', async (req, res, next) => {
   try {
-    const {latlong, track} = req.body
-
+    console.log(`hi`)
+    const {latlong, trackData} = req.body
     const newLike = await Dislike.create({
-      latlong
+      latlong,
+      trackId: trackData.id,
+      artistId: trackData.artistId,
+      albumId: trackData.albumId
     })
     ///make associations
+    const artist = await Artist.findById(trackData.artistId)
+    const album = await Album.findById(trackData.albumId)
+    const track = await Track.findById(trackData.id)
+    await track.addDislike(newLike)
+    await artist.addDislike(newLike)
+    await album.addDislike(newLike)
+
+    let newNumDislikes = track.dataValues.numDislikes
+    newNumDislikes++
+    await Track.update(
+      {numDislikes: newNumDislikes},
+      {
+        where: {id: track.id},
+        returning: true
+      }
+    )
+
+    await Track.update(
+      {rating: track.numLikes / (track.numLikes + track.numDislikes) * 100},
+      {
+        where: {id: track.id},
+        returning: true
+      }
+    )
 
     res.json(newLike)
   } catch (err) {
