@@ -32,6 +32,21 @@ class PopularityMap extends PureComponent {
             disLikesClicked: false
         }
     }
+<<<<<<< HEAD
+    async componentDidMount() {
+        const { data } = await axios.get(`/api/likes/album/${3}`)
+        console.log(data);
+        this.setState({
+            likes: data
+        })
+
+        const res = await axios.get(`/api/dislikes/artist/${3}`)
+        this.setState({
+            dislikes: res.data
+        })
+    }
+=======
+>>>>>>> master
 
     onMarkerClick = (evt) => {
         console.log(evt.payload);

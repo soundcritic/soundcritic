@@ -32,12 +32,12 @@ class ArtistView extends Component {
         artist: result.data
     })
 
-        const { data } = await axios.get(`/api/likes/${3}`)
+        const { data } = await axios.get(`/api/likes/artist/${3}`)
         this.setState({
             likes: data
         })
 
-        const res = await axios.get(`/api/dislikes/${3}`)
+        const res = await axios.get(`/api/dislikes/artist/${3}`)
         this.setState({
             dislikes: res.data
         })

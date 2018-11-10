@@ -11,26 +11,19 @@ const {
 } = require('../server/db/models')
 const {likeLatLong} = require('../seedData/likes')
 const {dislikeLatLong} = require('../seedData/dislikes')
-// const likes = require('../seedData/likes')
-// const dislikes = require('../seedData/dislikes')
+
 const tracks = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
-//const albums = JSON.parse(fs.readFileSync('./seedData/albums.json', 'utf8'))
-// const artists = JSON.parse(fs.readFileSync('./seedData/tracks.json', 'utf8'))
 
-//const albums = require('./albums')
-
-// albums.forEach(album => {
-//   console.log('album:', album)
-// })
 
 
 
 async function genNumDislikesField(createdDislikes) {
-for (let i = 0; i < dislikeLatLong.length; i++) {
+for (let i = 0; i < createdDislikes.length; i++) {
   const track = await Track.findById(
     Math.ceil(Math.random() * Math.floor(44))
   )
   const artist = await Artist.findById(track.artistId)
+  const album = await Album.findById(track.albumId)
 
   await track.addDislike(createdDislikes[i])
   let newNumDislikes = track.dataValues.numDislikes
@@ -43,14 +36,17 @@ for (let i = 0; i < dislikeLatLong.length; i++) {
       }
     )
     await artist.addDislike(createdDislikes[i])
+    await album.addDislike(createdDislikes[i])
 }
 }
 async function genNumLikesField(createdLikes) {
-for (let i = 0; i < likeLatLong.length; i++) {
+for (let i = 0; i < createdLikes.length; i++) {
   const track = await Track.findById(
     Math.ceil(Math.random() * Math.floor(44))
   )
     const artist = await Artist.findById(track.artistId)
+    const album = await Album.findById(track.albumId)
+
 
   await track.addLike(createdLikes[i])
   let newNumLikes = track.dataValues.numLikes
@@ -63,6 +59,7 @@ for (let i = 0; i < likeLatLong.length; i++) {
       }
     )
     await artist.addLike(createdLikes[i])
+    await album.addLike(createdLikes[i])
 
   }
 }
@@ -80,6 +77,18 @@ async function genRating(createdTracks) {
       }
     )
    }
+}
+function genLatLong() {
+  const top = 49.3457868 //# north lat
+  const bottom = 24.7433195 //# south lat
+
+  const left = -124.7844079 //# west long
+  const right = -66.9513812 //# east long
+
+  let lat = Math.random() * (top - bottom) + bottom
+  let long = Math.random() * (right - left) + left
+  let arr = [lat, long]
+  return arr
 }
 
 async function seed() {
@@ -181,26 +190,41 @@ async function seed() {
         albumId: albums[track.album].id,
         artistId: artists[track.artist].id,
         genre: track.genre,
-        numLikes: 1,
-        numDislikes: 1,
+        numLikes: 0,
+        numDislikes: 0,
         rating: 0
       })
       createdTracks.push(createdTrack)
       return createdTrack
     })
   )
+  // let createdLikes = []
+  // for (let i = 0; i < likeLatLong.length; i++) {
+  //   let newLike = await Like.create({
+  //     latlong: likeLatLong[i]
+  //   })
+  //   createdLikes.push(newLike)
+  // }
+
+  // let createdDislikes = []
+  // for (let i = 0; i < dislikeLatLong.length; i++) {
+  //   let newDislike = await Dislike.create({
+  //     latlong: dislikeLatLong[i]
+  //   })
+  //   createdDislikes.push(newDislike)
+  // }
   let createdLikes = []
-  for (let i = 0; i < likeLatLong.length; i++) {
+  for (let i = 0; i < 225; i++) {
     let newLike = await Like.create({
-      latlong: likeLatLong[i]
+      latlong: genLatLong()
     })
     createdLikes.push(newLike)
   }
 
   let createdDislikes = []
-  for (let i = 0; i < dislikeLatLong.length; i++) {
+  for (let i = 0; i < 125; i++) {
     let newDislike = await Dislike.create({
-      latlong: dislikeLatLong[i]
+      latlong: genLatLong()
     })
     createdDislikes.push(newDislike)
   }
