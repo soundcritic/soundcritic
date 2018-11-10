@@ -48,6 +48,19 @@ class DayIterator extends Component {
       }
       console.log(randomNumber)
       console.log(this.props)
+      if (this.props.oneTrack.rating < 50){
+
+        if (randomNumber > 50) {
+          //POST like
+          this.props.postLike(data)
+          //genNumDislikesField(latlong)
+        } else {
+          //POST dislike
+          this.props.postDislike(data)
+        }
+      }
+  if (this.props.oneTrack.rating >= 50) {
+
       if (randomNumber > 80) {
         //POST like
         this.props.postLike(data)
@@ -57,6 +70,7 @@ class DayIterator extends Component {
         this.props.postDislike(data)
       }
     }
+  }
   }
 
   render() {
