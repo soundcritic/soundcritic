@@ -4,17 +4,38 @@ const {Artist, Track, Like, Album} = require('../db/models')
 //POST /api/likes
 router.post('/', async (req, res, next) => {
   try {
-    const {latlong, track} = req.body
-    console.log('trackkkkkkdata', track.artistId);
+    const {latlong, trackData} = req.body
     const newLike = await Like.create({
       latlong,
-      trackId: track.id,
-      artistId: track.artistId,
-      albumId: track.albumId
-
-
+      trackId: trackData.id,
+      artistId: trackData.artistId,
+      albumId: trackData.albumId
     })
     ///make associations
+    const artist = await Artist.findById(trackData.artistId)
+    const album = await Album.findById(trackData.albumId)
+    const track = await Track.findById(trackData.id)
+
+    await track.addLike(newLike)
+    await artist.addLike(newLike)
+    await album.addLike(newLike)
+
+    let newNumLikes = track.dataValues.numLikes
+      newNumLikes++
+      await Track.update(
+        {numLikes: newNumLikes},
+        {
+          where: {id: track.id},
+          returning: true
+        }
+      )
+      await Track.update(
+        {rating:  ((track.numLikes/(track.numLikes+track.numDislikes))*100)},
+        {
+          where: {id: track.id},
+          returning: true
+        }
+      )
 
     res.json(newLike)
   } catch (err) {
@@ -74,6 +95,5 @@ router.get('/artist/:artistId', async (req, res, next) => {
     next(err)
   }
 })
-
 
 module.exports = router
