@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import MusicOff from '@material-ui/icons/MusicOff'
 import { withStyles } from '@material-ui/core/styles';
-
+import DayIterator from './DayIterator'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
@@ -34,6 +34,7 @@ const Navbar = (props) => {
               Sound Critic <MusicOff />
           </Link>
             </Typography>
+          <DayIterator />
           <Link to='/albums'>
             <Button color="inherit">Login</Button>
           </Link>
