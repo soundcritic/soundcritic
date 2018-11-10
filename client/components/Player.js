@@ -16,15 +16,6 @@ import ThumbsDownIcon from "@material-ui/icons/ThumbDown"
 import LoopIcon from "@material-ui/icons/Loop"
 
 const AUDIO = document.createElement('audio')
-const mod = (num, m) => ((num % m) + m) % m
-
-const skip = (interval, { trackList, currentTrack }) => {
-    let idx = trackList.map(song => song.id).indexOf(currentTrack.id)
-    idx = mod(idx + interval, trackList.length)
-    const next = trackList[idx]
-    return [next, trackList]
-}
-
 
 const styles = theme => ({
     container: {
@@ -76,14 +67,12 @@ class Player extends Component {
         }
     }
 
-    play = (song, trackList) => {
+    play = (song) => {
         AUDIO.src = song.audioPath
         AUDIO.load()
         AUDIO.play()
         this.setState({
-            currentTrackId: song.id,
             isPlaying: true,
-            trackList
         })
     }
 
@@ -94,28 +83,13 @@ class Player extends Component {
         })
     }
 
-    forward = () => {
-        const { allTracks } = this.props
-
-        const current = trackList.map(track => track.id).indexOf(currentTrackId)
-        const next = current + 1
-
-       /*  if (next > trackList.length) {
+    forward = async () => {
+        if (this.state.isPlaying) {
             AUDIO.pause()
-            AUDIO.src = ''
-            this.setState({
-                isPlaying: false,
-                currentTrackId: 0,
-                trackList: []
-            })
-        } else {
-            AUDIO.pause()
-            this.play(trackList[next], trackList)
-            this.setState({
-                currentTrackId: next,
-                currentTrack: trackList[next]
-            })
-        } */
+            await this.props.fetchOneTrackSelector(44)
+            const newSong = this.props.oneTrack
+            this.play(newSong)
+        }
     }
 
     async componentDidMount() {
@@ -169,7 +143,7 @@ class Player extends Component {
                             </IconButton>
                         }
                         <IconButton aria-label="Next">
-                            <SkipNextIcon onClick={() => this.props.fetchOneTrackSelector(44)} title='Next' />
+                            <SkipNextIcon onClick={() => this.forward()} title='Next' />
                         </IconButton>
                     </div>
                     <hr />
