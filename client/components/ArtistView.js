@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import AllAlbums from "./AllAlbums"
 import PopularityMap from "./PopularityMap";
 import { connect } from 'react-redux'
-import { fetchOneArtist } from "../store/artist"
-import axios from 'axios'
-
+import { fetchOneArtist, oneArtist, getArtistLikes, getArtistDislikes, allLikes, allDislikes } from "../store/"
 
 import { withStyles } from '@material-ui/core/styles'
 
@@ -17,46 +15,38 @@ const styles = {
 }
 
 class ArtistView extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            likes: [],
-            dislikes: [],
-            artist: {}
-        }
-    }
 
     async componentDidMount() {
-       const result = await axios.get(`/api/artists/${3}`)
-       this.setState({
-        artist: result.data
-    })
-
-        const { data } = await axios.get(`/api/likes/artist/${3}`)
-        this.setState({
-            likes: data
-        })
-
-        const res = await axios.get(`/api/dislikes/artist/${3}`)
-        this.setState({
-            dislikes: res.data
-        })
+        const { fetchOneArtist, getArtistDislikes, getArtistLikes } = this.props
+        await fetchOneArtist(3)
+        await getArtistLikes(3)
+        await getArtistDislikes(3)
     }
 
     render() {
-        const {classes} = this.props
-        const {likes, dislikes, artist} = this.state
+        const { classes, oneArtist, allLikes, allDislikes } = this.props
+        console.log(this.props)
 
         return (
             <div className={classes.container}>
-                <AllAlbums artist={artist} />
-                <PopularityMap likes={likes} dislikes={dislikes} />
+                <AllAlbums artist={oneArtist} />
+                <PopularityMap likes={allLikes} dislikes={allDislikes} />
             </div>
         )
     }
 }
 
+const mapState = state => {
+    const { oneArtist, allLikes, allDislikes } = state
+    return {
+        oneArtist,
+        allLikes,
+        allDislikes
+    }
+}
 
 
-
-export default connect(null, { fetchOneArtist })(withStyles(styles)(ArtistView))
+export default connect(
+    mapState,
+    { fetchOneArtist, getArtistLikes, getArtistDislikes }
+)(withStyles(styles)(ArtistView))

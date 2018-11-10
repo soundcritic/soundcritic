@@ -13,6 +13,7 @@ const styles = {
         margin: ' 10px',
         padding: '10px',
         height: '200px',
+        backgroundColor: 'gainsboro'
     },
     cardGrid: {
         display: 'flex',
@@ -20,7 +21,8 @@ const styles = {
         marginTop: '10px'
     },
     title: {
-        marginTop: '10px'
+        marginTop: '10px',
+        color: 'azure'
     },
 }
 
@@ -38,7 +40,7 @@ const AllAlbums = (props) => {
             <div className={classes.cardGrid}>
                 {artist.albums.map(album => {
                     return (
-                        <Link to={`/albums/${album.id}`} key={album.id}>
+                        <Link to={`/albums/${album.id}`} key={album.id} >
                             <Card className={classes.card}  >
                                 <img className={classes.cover} src={album.artworkPath} />
                                 <Typography component="h5">
@@ -49,6 +51,7 @@ const AllAlbums = (props) => {
                     )
                 })}
             </div>
+            <hr style={{width: '50%'}}/>
         </div>
     )
 }

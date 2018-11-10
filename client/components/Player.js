@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import {connect} from 'react-redux'
-import {fetchOneTrackSelector, fetchAllTracks} from '../store'
+import { connect } from 'react-redux'
+import { fetchOneTrackSelector, fetchAllTracks, oneTrack, allTracks } from '../store'
 
 import { withStyles } from '@material-ui/core/styles'
-
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import PauseIcon from '@material-ui/icons/Pause'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
@@ -19,16 +16,6 @@ import ThumbsDownIcon from "@material-ui/icons/ThumbDown"
 import LoopIcon from "@material-ui/icons/Loop"
 
 const AUDIO = document.createElement('audio')
-const mod = (num, m) => ((num % m) + m) % m
-
-const skip = (interval, { trackList, currentTrack }) => {
-    let idx = trackList.map(song => song.id).indexOf(currentTrack.id)
-    idx = mod(idx + interval, trackList.length)
-    const next = trackList[idx]
-    return [next, trackList]
-}
-
-import PropTypes from 'prop-types'
 
 const styles = theme => ({
     container: {
@@ -75,37 +62,16 @@ class Player extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            currentTrack: {},
-            trackList: [],
             isPlaying: false,
-            currentTrackId: 0,
         }
     }
 
-    shuffleTracks(array) {
-        let currentIndex = array.length,
-            temporaryValue,
-            randomIndex
-
-        while (0 !== currentIndex) {
-            randomIndex = Math.floor(Math.random() * currentIndex)
-            currentIndex -= 1
-
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-        }
-        return array;
-    }
-
-    play = (song, trackList) => {
+    play = (song) => {
         AUDIO.src = song.audioPath
         AUDIO.load()
         AUDIO.play()
         this.setState({
-            currentTrackId: song.id,
             isPlaying: true,
-            trackList
         })
     }
 
@@ -116,54 +82,31 @@ class Player extends Component {
         })
     }
 
-    forward = () => {
-        const { currentTrackId, trackList } = this.state
-        const current = trackList.map(track => track.id).indexOf(currentTrackId)
-        const next = current + 1
-
-        if (next > trackList.length) {
+    forward = async () => {
+        if (this.state.isPlaying) {
             AUDIO.pause()
-            AUDIO.src= ''
-            this.setState({
-                isPlaying: false,
-                currentTrackId: 0,
-                trackList: []
-            })
-        } else {
-            AUDIO.pause()
-            this.play(trackList[next], trackList)
-            this.setState({
-                currentTrackId: next,
-                currentTrack: trackList[next]
-            })
+            await this.props.fetchOneTrackSelector(44)
+            const newSong = this.props.oneTrack
+            this.play(newSong)
         }
     }
 
-
-
     async componentDidMount() {
         try {
-
-            let { data } = await axios.get('/api/tracks')
-            const rand = Math.ceil(Math.random() * Math.floor(data.length + 1))
-            data = this.shuffleTracks(data)
-
-            this.setState({
-
-                currentTrack: data[rand],
-                trackList: data
-            })
+            const { fetchAllTracks } = this.props
+            await fetchAllTracks()
+            await this.props.fetchOneTrackSelector(44)
         } catch (err) {
             console.error(err)
         }
     }
 
     render() {
-        const { classes } = this.props
-        const { currentTrack , isPlaying, trackList} = this.state
-        console.log(currentTrack)
+        console.log(this.props)
+        const { classes, oneTrack } = this.props
+        const { isPlaying, trackList } = this.state
 
-        if (!currentTrack.album) return <div />
+        if (!oneTrack.id) return <div />
 
         return (
             <div className={classes.container}>
@@ -172,35 +115,34 @@ class Player extends Component {
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
                             <Typography component="h5" variant="h5">
-                                90%
-                        </Typography>
+                                {`${oneTrack.rating}%`}
+                            </Typography>
                             <CardMedia
                                 className={classes.cover}
-                                image={currentTrack.album.artworkPath}
+                                image={oneTrack.album.artworkPath}
                             />
-
-                            <Typography component="h5" variant="h5" title={currentTrack.album.title}>
-                                {currentTrack.album.title}
-                                </Typography>
+                            <Typography component="h5" variant="h5" title={oneTrack.album.title}>
+                                {oneTrack.album.title}
+                            </Typography>
                             <Typography variant="subtitle1" color="textSecondary">
-                                {currentTrack.artist.name}
-                                </Typography>
+                                {oneTrack.artist.name}
+                            </Typography>
                         </CardContent>
                     </div>
 
                     <div className={classes.controls}>
                         <IconButton aria-label="Loop" >
-                        <LoopIcon title='Repeat song' />
+                            <LoopIcon title='Repeat song' />
                         </IconButton>
                         {!isPlaying ? <IconButton aria-label="Play/pause">
-                            <PlayArrowIcon title='Play' className={classes.playIcon} onClick={() => this.play(currentTrack, trackList)} />
+                            <PlayArrowIcon title='Play' className={classes.playIcon} onClick={() => this.play(oneTrack, trackList)} />
                         </IconButton> :
-                        <IconButton aria-label="Play/pause">
-                        <PauseIcon title='Pause/Resume' className={classes.playIcon} onClick={() => this.pause()} />
-                    </IconButton>
-                    }
+                            <IconButton aria-label="Play/pause">
+                                <PauseIcon title='Pause/Resume' className={classes.playIcon} onClick={() => this.pause()} />
+                            </IconButton>
+                        }
                         <IconButton aria-label="Next">
-                           <SkipNextIcon onClick={() => this.forward()} title='Next' />
+                            <SkipNextIcon onClick={() => this.forward()} title='Next' />
                         </IconButton>
                     </div>
                     <hr />
@@ -219,6 +161,15 @@ class Player extends Component {
 }
 
 
+const mapState = state => {
+    const { allTracks, oneTrack } = state
+    return {
+        allTracks,
+        oneTrack
+    }
+}
 
-
-export default connect(null, {fetchOneTrackSelector, fetchAllTracks})(withStyles(styles, { withTheme: true })(Player))
+export default connect(
+    mapState,
+    { fetchOneTrackSelector, fetchAllTracks }
+)(withStyles(styles, { withTheme: true })(Player))

@@ -22,7 +22,7 @@ router.get('/', async (req, res, next) => {
 
   router.get('/:id', async (req, res, next) => {
     try {
-      const track = await Track.findById(req.params.id)
+      const track = await Track.findById(req.params.id, {include: [Album, Artist]})
       //console.log(track);
       res.json(track)
     } catch (err) {
