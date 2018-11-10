@@ -58,6 +58,7 @@ router.get('/artist/:artistId', async (req, res, next) => {
 //POST /api/dislikes
 router.post('/', async (req, res, next) => {
   try {
+    console.log(`hi`);
     const {latlong, track} = req.body
 
     const newLike = await Dislike.create({

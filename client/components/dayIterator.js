@@ -34,10 +34,10 @@ class DayIterator extends Component {
     }
   } //
   dayIterator = async () => {
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 1; i++) {
       //select a track with selector thunk
       let numOfTracks = this.props.allTracks.length
-      this.props.fetchOneTrackSelector(numOfTracks)
+       this.props.fetchOneTrackSelector(numOfTracks)
 
       //choose to like or dislike
       const randomNumber = Math.ceil(Math.random() * Math.floor(100))
@@ -47,14 +47,19 @@ class DayIterator extends Component {
         track: this.props.oneTrack
       }
       console.log(randomNumber)
+      console.log(this.props);
       if (randomNumber > 40) {
         //POST like
-        //this.props.postLike(data)
-        await axios.post('/api/likes', data)
+        console.log('datatatata', data);
+        this.props.postLike(data)
+        //await axios.post('/api/likes', data)
+        //console.log(this.props);
+
       } else {
         //POST dislike
-        await axios.post('/api/dislikes', data)
-        //this.props.postDislike(data)
+        //await axios.post('/api/dislikes', data)
+        this.props.postDislike(data)
+        //console.log(this.props);
       }
     }
   }
@@ -71,10 +76,13 @@ class DayIterator extends Component {
 }
 
 const mapState = state => {
-  const {oneTrack, allTracks} = state
+  const {oneTrack, allTracks, allLikes, allDislikes} = state
   return {
     oneTrack,
-    allTracks
+    allTracks,
+    allLikes,
+    allDislikes
+
   }
 }
 

@@ -1,6 +1,26 @@
 const router = require('express').Router()
 const {Artist, Track, Like, Album} = require('../db/models')
 
+//POST /api/likes
+router.post('/', async (req, res, next) => {
+  try {
+    const {latlong, track} = req.body
+    console.log('trackkkkkkdata', track.artistId);
+    const newLike = await Like.create({
+      latlong,
+      trackId: track.id,
+      artistId: track.artistId,
+      albumId: track.albumId
+
+
+    })
+    ///make associations
+
+    res.json(newLike)
+  } catch (err) {
+    next(err)
+  }
+})
 //GET /api/likes
 router.get('/', async (req, res, next) => {
   try {
@@ -55,23 +75,5 @@ router.get('/artist/:artistId', async (req, res, next) => {
   }
 })
 
-//POST /api/likes
-router.post('/', async (req, res, next) => {
-  try {
-    console.log('hi')
-    const {latlong, track} = req.body
-    const newLike = await Like.create({
-      latlong,
-      trackId: track.id,
-      artistId: track.artistId
-    })
-    console.log(track)
-    ///make associations
-
-    res.json(newLike)
-  } catch (err) {
-    next(err)
-  }
-})
 
 module.exports = router
