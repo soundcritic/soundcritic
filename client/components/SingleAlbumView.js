@@ -48,6 +48,7 @@ class SingleAlbumView extends Component {
     }
 
     render() {
+
         const { oneAlbum, allLikes, allDislikes, classes } = this.props
 
         if (!this.props.oneAlbum.id) return <div />
