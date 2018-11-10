@@ -35,8 +35,8 @@ const Navbar = (props) => {
           </Link>
             </Typography>
           <DayIterator />
-          <Link to='/albums'>
-            <Button color="inherit">Login</Button>
+          <Link to='/albums' >
+            <Button color="inherit" >Artist Login</Button>
           </Link>
         </Toolbar>
       </AppBar>
