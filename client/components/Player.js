@@ -63,7 +63,6 @@ class Player extends Component {
         super(props)
         this.state = {
             isPlaying: false,
-            currentTrackId: 0,
         }
     }
 
