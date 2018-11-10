@@ -38,7 +38,7 @@ const AllAlbums = (props) => {
             <div className={classes.cardGrid}>
                 {artist.albums.map(album => {
                     return (
-                        <Link to={`/albums/${album.id}`} key={album.id}>
+                        <Link to={`/albums/${album.id}`} key={album.id} >
                             <Card className={classes.card}  >
                                 <img className={classes.cover} src={album.artworkPath} />
                                 <Typography component="h5">
