@@ -81,6 +81,18 @@ async function genRating(createdTracks) {
     )
    }
 }
+function genLatLong() {
+  const top = 49.3457868 //# north lat
+  const bottom = 24.7433195 //# south lat
+
+  const left = -124.7844079 //# west long
+  const right = -66.9513812 //# east long
+
+  let lat = Math.random() * (top - bottom) + bottom
+  let long = Math.random() * (right - left) + left
+  let arr = [lat, long]
+  return arr
+}
 
 async function seed() {
   await db.sync({force: true})
@@ -189,18 +201,33 @@ async function seed() {
       return createdTrack
     })
   )
+  // let createdLikes = []
+  // for (let i = 0; i < likeLatLong.length; i++) {
+  //   let newLike = await Like.create({
+  //     latlong: likeLatLong[i]
+  //   })
+  //   createdLikes.push(newLike)
+  // }
+
+  // let createdDislikes = []
+  // for (let i = 0; i < dislikeLatLong.length; i++) {
+  //   let newDislike = await Dislike.create({
+  //     latlong: dislikeLatLong[i]
+  //   })
+  //   createdDislikes.push(newDislike)
+  // }
   let createdLikes = []
-  for (let i = 0; i < likeLatLong.length; i++) {
+  for (let i = 0; i < 50; i++) {
     let newLike = await Like.create({
-      latlong: likeLatLong[i]
+      latlong: genLatLong()
     })
     createdLikes.push(newLike)
   }
 
   let createdDislikes = []
-  for (let i = 0; i < dislikeLatLong.length; i++) {
+  for (let i = 0; i < 25; i++) {
     let newDislike = await Dislike.create({
-      latlong: dislikeLatLong[i]
+      latlong: genLatLong()
     })
     createdDislikes.push(newDislike)
   }
