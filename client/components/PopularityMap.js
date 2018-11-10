@@ -36,6 +36,7 @@ class PopularityMap extends PureComponent {
     }
     async componentDidMount() {
         const { data } = await axios.get(`/api/likes/album/${3}`)
+        console.log(data);
         this.setState({
             likes: data
         })
