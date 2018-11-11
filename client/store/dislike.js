@@ -50,7 +50,7 @@ export function allDislikes(state = defaultAllDislikes, action) {
     case GET_ALL_DISLIKES:
       return action.dislikes
     case ADD_DISLIKE:
-      return action.dislike
+      return [...state, action.dislike]
     default:
       return state
   }

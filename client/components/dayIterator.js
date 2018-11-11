@@ -32,13 +32,13 @@ class DayIterator extends Component {
     } catch (err) {
       console.log(err)
     }
-  } //
+  }
   dayIterator = async () => {
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 50; i++) {
       //select a track with selector thunk
       let numOfTracks = this.props.allTracks.length
       await this.props.fetchOneTrackSelector(numOfTracks)
-
+      //console.log(numOfTracks);
       //choose to like or dislike
       const randomNumber = Math.ceil(Math.random() * Math.floor(100))
       const latlong = genLatLong()
@@ -46,10 +46,9 @@ class DayIterator extends Component {
         latlong: latlong,
         trackData: this.props.oneTrack
       }
-      console.log(randomNumber)
-      console.log(this.props)
-      if (this.props.oneTrack.rating < 50){
-
+      // console.log(randomNumber)
+      // console.log(this.props.oneTrack)
+      if (this.props.oneTrack.rating < 50) {
         if (randomNumber > 50) {
           //POST like
           this.props.postLike(data)
@@ -59,18 +58,17 @@ class DayIterator extends Component {
           this.props.postDislike(data)
         }
       }
-  if (this.props.oneTrack.rating >= 50) {
-
-      if (randomNumber > 80) {
-        //POST like
-        this.props.postLike(data)
-        //genNumDislikesField(latlong)
-      } else {
-        //POST dislike
-        this.props.postDislike(data)
+      if (this.props.oneTrack.rating >= 50) {
+        if (randomNumber > 80) {
+          //POST like
+          this.props.postLike(data)
+          //genNumDislikesField(latlong)
+        } else {
+          //POST dislike
+          this.props.postDislike(data)
+        }
       }
     }
-  }
   }
 
   render() {
