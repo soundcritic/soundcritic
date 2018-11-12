@@ -102,7 +102,7 @@ class PopularityMap extends PureComponent {
             defaultZoom={mapConfig.zoom}
             provider={getProvider}
           >
-            {disLikesClicked ? PigeonMarkersLikes : PigeonMarkersDislikes}
+            {!disLikesClicked ? PigeonMarkersLikes : PigeonMarkersDislikes}
           </Map>
         </div>
       </div>
