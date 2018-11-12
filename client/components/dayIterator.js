@@ -6,7 +6,7 @@ import {
   postLike,
   postDislike
 } from '../store'
-import axios from 'axios'
+import Button from '@material-ui/core/Button'
 
 function genLatLong() {
   const top = 49.3457868 //# north lat
@@ -73,9 +73,9 @@ class DayIterator extends Component {
 
   render() {
     return (
-      <button type="button" onClick={() => this.dayIterator()}>
+      <Button style={{color: 'azure'}} type="button" onClick={() => this.dayIterator()}>
         Iterate Day
-      </button>
+      </Button>
     )
   }
 }
